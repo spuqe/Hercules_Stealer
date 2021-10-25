@@ -16,9 +16,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using Crying.Reader;
-using Crying.Helpers;
-using static Crying.Helpers.Common;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Reflection;
@@ -26,7 +23,6 @@ using System.Diagnostics;
 using Microsoft.VisualBasic;
 using System.ServiceProcess;
 using System.Net.NetworkInformation;
-
 #endregion
 
 namespace Hercules_Stealer

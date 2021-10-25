@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Eu9i0xX22M28jxtKNGyo+YBTqHpImE+pKk/OCWxbkOYvyeiVYqlUskPwz8/CtCX48PTmVXWESeL8fVUk9WeVZA==",
+  "dgSpecHash": "zbKllIAgrs2YJg3XR83gVouESZ1d66pM/HG6ZJqqyaiq4tjPp8+RHgNMgHptymgdV6BDuoRebCTJPCrLzvBOOQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\NIVIV\\Documents\\Projects\\Hercules Grabber\\Hercules Grabber\\Hercules Grabber.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\NIVIV\\Desktop\\Hercules_Stealer-main\\Hercules Grabber\\Hercules Grabber.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\NIVIV\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\NIVIV\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\NIVIV\\.nuget\\packages\\system.drawing.common\\5.0.2\\system.drawing.common.5.0.2.nupkg.sha512"
+  ],
   "logs": []
 }
